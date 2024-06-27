@@ -51,10 +51,8 @@ constexpr auto qt_meta_stringdata_CLASSpixeleditorENDCLASS = QtMocHelpers::strin
     "colorToPurple",
     "colorToBlack",
     "colorToWhite",
-    "newFile",
     "load",
     "save",
-    "saveUnder",
     "exit"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
@@ -68,7 +66,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSpixeleditorENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-      18,   14, // methods
+      16,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -76,28 +74,24 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSpixeleditorENDCLASS[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,  122,    2, 0x0a,    1 /* Public */,
-       3,    0,  123,    2, 0x0a,    2 /* Public */,
-       4,    0,  124,    2, 0x0a,    3 /* Public */,
-       5,    0,  125,    2, 0x0a,    4 /* Public */,
-       6,    0,  126,    2, 0x0a,    5 /* Public */,
-       7,    0,  127,    2, 0x0a,    6 /* Public */,
-       8,    0,  128,    2, 0x0a,    7 /* Public */,
-       9,    0,  129,    2, 0x0a,    8 /* Public */,
-      10,    0,  130,    2, 0x0a,    9 /* Public */,
-      11,    0,  131,    2, 0x0a,   10 /* Public */,
-      12,    0,  132,    2, 0x0a,   11 /* Public */,
-      13,    0,  133,    2, 0x0a,   12 /* Public */,
-      14,    0,  134,    2, 0x0a,   13 /* Public */,
-      15,    0,  135,    2, 0x0a,   14 /* Public */,
-      16,    0,  136,    2, 0x0a,   15 /* Public */,
-      17,    0,  137,    2, 0x0a,   16 /* Public */,
-      18,    0,  138,    2, 0x0a,   17 /* Public */,
-      19,    0,  139,    2, 0x0a,   18 /* Public */,
+       1,    0,  110,    2, 0x0a,    1 /* Public */,
+       3,    0,  111,    2, 0x0a,    2 /* Public */,
+       4,    0,  112,    2, 0x0a,    3 /* Public */,
+       5,    0,  113,    2, 0x0a,    4 /* Public */,
+       6,    0,  114,    2, 0x0a,    5 /* Public */,
+       7,    0,  115,    2, 0x0a,    6 /* Public */,
+       8,    0,  116,    2, 0x0a,    7 /* Public */,
+       9,    0,  117,    2, 0x0a,    8 /* Public */,
+      10,    0,  118,    2, 0x0a,    9 /* Public */,
+      11,    0,  119,    2, 0x0a,   10 /* Public */,
+      12,    0,  120,    2, 0x0a,   11 /* Public */,
+      13,    0,  121,    2, 0x0a,   12 /* Public */,
+      14,    0,  122,    2, 0x0a,   13 /* Public */,
+      15,    0,  123,    2, 0x0a,   14 /* Public */,
+      16,    0,  124,    2, 0x0a,   15 /* Public */,
+      17,    0,  125,    2, 0x0a,   16 /* Public */,
 
  // slots: parameters
-    QMetaType::Void,
-    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -153,13 +147,9 @@ Q_CONSTINIT const QMetaObject pixeleditor::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'colorToWhite'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'newFile'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'load'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'save'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'saveUnder'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'exit'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
@@ -186,11 +176,9 @@ void pixeleditor::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         case 10: _t->colorToPurple(); break;
         case 11: _t->colorToBlack(); break;
         case 12: _t->colorToWhite(); break;
-        case 13: _t->newFile(); break;
-        case 14: _t->load(); break;
-        case 15: _t->save(); break;
-        case 16: _t->saveUnder(); break;
-        case 17: _t->exit(); break;
+        case 13: _t->load(); break;
+        case 14: _t->save(); break;
+        case 15: _t->exit(); break;
         default: ;
         }
     }
@@ -216,13 +204,13 @@ int pixeleditor::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 18)
+        if (_id < 16)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 18;
+        _id -= 16;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 18)
+        if (_id < 16)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 18;
+        _id -= 16;
     }
     return _id;
 }

@@ -22,7 +22,7 @@
 #include <QString>
 #include <QImage>
 #include <QMessageBox>
-//#include <QFileDialog>
+#include <QGraphicsPixmapItem>
 
 class pixeleditor : public QMainWindow{
 
@@ -236,10 +236,10 @@ public:
 
         bar = menuBar();
         menu = bar->addMenu(tr("&Datei"));
-        action1 = new QAction("&Neue Datei", this);
+
         action2 = new QAction("&Datei laden", this);
         action3 = new QAction("&Speichern", this);
-        action4 = new QAction("&Speichern unter...", this);
+
         action5 = new QAction("&Beenden", this);
 
         menu2 = bar->addMenu(tr("&Stift"));
@@ -249,10 +249,10 @@ public:
         action9 = new QAction("&Stern", this);
         action10 = new QAction("&Herz", this);
 
-        menu->addAction(action1);
+
         menu->addAction(action2);
         menu->addAction(action3);
-        menu->addAction(action4);
+
         menu->addAction(action5);
         menu2->addAction(action6);
         menu2->addAction(action7);
@@ -270,10 +270,8 @@ public:
         layoutWidget->setLayout(layout1); //Widet für das Basis-Layout, um es zentral setzen zu können
         setCentralWidget(layoutWidget);
 
-        QObject::connect(action1, &QAction::triggered, this, &pixeleditor::newFile);
         QObject::connect(action2, &QAction::triggered, this, &pixeleditor::load);
         QObject::connect(action3, &QAction::triggered, this, &pixeleditor::save);
-        QObject::connect(action4, &QAction::triggered, this, &pixeleditor::saveUnder);
         QObject::connect(action5, &QAction::triggered, this, &pixeleditor::exit);
         QObject::connect(action6, &QAction::triggered, this, &pixeleditor::setToThin);
         QObject::connect(action7, &QAction::triggered, this, &pixeleditor::setToThick);
@@ -347,8 +345,23 @@ public slots:
         farbe->setText("Farbe : Weiß");
         currentColor = QColor(255,255,255,255);
     }
-    void newFile(){}
+
     void load(){
+        try{
+            img = new QImage("test.png");
+            if(img->isNull()){
+                throw 1;
+            }
+            item = new QGraphicsPixmapItem(QPixmap::fromImage(QImage("test.png"),Qt::AutoColor));
+            scene->addItem(item);
+            loadMessage = new QMessageBox(QMessageBox::Information, "Vorgang abgeschlossen", "Das Bild wurde geladen.", QMessageBox::Ok);
+            loadMessage->open();
+        }
+        catch(int n){
+            errorMessage = new QMessageBox(QMessageBox::Warning, "Fehler", "Beim Laden der Datei is ein Fehler aufgetreten.", QMessageBox::Ok);
+            errorMessage->open();
+        }
+
     }
     void save(){
         img = new QImage(sceneView->sceneRect().width(), sceneView->sceneRect().height(), QImage::Format_RGBX16FPx4);
@@ -359,7 +372,6 @@ public slots:
         img->save("test.png");
         saveMessage->open();
     }
-    void saveUnder(){}
     void exit(){
         close();
     }
@@ -367,6 +379,7 @@ private:
     QWidget *layoutWidget;
     QWidget *gridWidget;
 
+    QString fileName;
     QLayout *layout1;
     QGridLayout *paletteGrid;
     QLabel *farbe;
@@ -378,8 +391,10 @@ private:
     QImage *img;
     QPainter *pain;
     QMessageBox *saveMessage;
-    //QFileDialog *fileDia;
+    QMessageBox *loadMessage;
+    QMessageBox *errorMessage;
 
+    QGraphicsPixmapItem *item;//Zum Laden einer Datei
     QPushButton *colour1;
     QPushButton *colour2;
     QPushButton *colour3;
@@ -394,10 +409,8 @@ private:
     QGraphicsScene *scene;
     QGraphicsView *sceneView;
     QRectF *px;
-    QAction *action1;
     QAction *action2;
     QAction *action3;
-    QAction *action4;
     QAction *action5;
     QAction *action6;
     QAction *action7;
