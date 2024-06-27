@@ -18,6 +18,11 @@
 #include <QtMath>
 #include <QEvent>
 #include <iostream>
+#include <QLabel>
+#include <QString>
+#include <QImage>
+#include <QMessageBox>
+//#include <QFileDialog>
 
 class pixeleditor : public QMainWindow{
 
@@ -25,18 +30,21 @@ class pixeleditor : public QMainWindow{
 
 public:
 
+
+    int getCurrentBrush(){
+        return currentBrush;
+    }
     /*
      * void pixeleditor::paint(QMouseEvent *e)
      * Setzt ein Kästchen/ Pixel an die Stelle des Cursors
     */
 
-    void paint(QMouseEvent *e){
+    void paint(QMouseEvent *e){ //Berechnung der Position beachtet auch Abstände zu anderen Widget-Elementen (z.B. Menübar)
 
         currentPos = QPoint((int)((qreal)(calcPixel(px_size,e->position().x()-2*(sceneView->x())))),calcPixel(px_size,e->position().y()-bar->height()-windowWOScene/2));
         scene->addRect(currentPos.x(),currentPos.y(), 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
         update();
     }
-
     //-------------------------------------------------------------------------------//
 
     /*
@@ -44,7 +52,7 @@ public:
      * Setzt ein 3x3 Kästchen-/ Pixelmuster an die Position des Cursors.
     */
 
-    void paintNine(QMouseEvent *e){
+    void paintNine(QMouseEvent *e){ //Berechnung der Position beachtet auch Abstände zu anderen Widget-Elementen (z.B. Menübar)
 
         currentPos = QPoint((int)(qCeil((qreal)(calcPixel(px_size,e->position().x())-2*(sceneView->x())))-1),calcPixel(px_size,e->position().y()-bar->height()-windowWOScene/2));
         scene->addRect(currentPos.x(),currentPos.y(), 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
@@ -65,7 +73,7 @@ public:
      * Setzt ein herzförmiges Kästchen-/ Pixelmuster an die Position des Cursors.
     */
 
-    void paintHeart(QMouseEvent *e){
+    void paintHeart(QMouseEvent *e){//Berechnung der Position beachtet auch Abstände zu anderen Widget-Elementen (z.B. Menübar)
 
         currentPos = QPoint((int)(qCeil((qreal)(calcPixel(px_size,e->position().x())-2*(sceneView->x())))-1),calcPixel(px_size,e->position().y()-bar->height()-windowWOScene/2));
 
@@ -89,6 +97,7 @@ public:
         scene->addRect(currentPos.x(),currentPos.y()+2*px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
         update();
     }
+
     //-------------------------------------------------------------------------------//
 
     /*
@@ -96,7 +105,7 @@ public:
      * Setzt ein herzförmiges Kästchen-/ Pixelmuster an die Position des Cursors.
     */
 
-    void paintStar(QMouseEvent *e){
+    void paintStar(QMouseEvent *e){//Berechnung der Position beachtet auch Abstände zu anderen Widget-Elementen (z.B. Menübar)
 
         currentPos = QPoint((int)(qCeil((qreal)(calcPixel(px_size,e->position().x())-2*(sceneView->x())))-1),calcPixel(px_size,e->position().y()-bar->height()-windowWOScene/2));
 
@@ -113,6 +122,7 @@ public:
         scene->addRect(currentPos.x()+2*px_size,currentPos.y()-px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
         update();
     }
+
     //-------------------------------------------------------------------------------//
 
     /*
@@ -121,7 +131,7 @@ public:
      * Es werden immer die gleichen Pixel ausgefüllt (alle mit x-Koord + y-Koord % 2 = 0, also "alle zwei Pixel")
     */
 
-    void paintCheckered(QMouseEvent *e){
+    void paintCheckered(QMouseEvent *e){//Berechnung der Position beachtet auch Abstände zu anderen Widget-Elementen (z.B. Menübar)
 
         currentPos = QPoint((int)(qCeil((qreal)(calcPixel(px_size,e->position().x())-2*(sceneView->x())))-1),calcPixel(px_size,e->position().y()-bar->height()-windowWOScene/2));
 
@@ -172,14 +182,16 @@ public:
     pixeleditor(QWidget *parent = NULL) : QMainWindow(parent){
 
         currentBrush = 1;
-        setMouseTracking(true);
+        currentColor = QColor(20,20,20,255); //Ausgangspinsel: Dünn, Schwarz
         isPainting = false;
-        currentColor = QColor(20,20,20,255);
-        px_x = 32.0;
-        px_y = 32.0;
-        px_size = 10.0;
+
+        px_x = 32.0; //Anzahl der Pixel entlang x
+        px_y = 32.0; //Anzahl der Pixel entlang y
+        px_size = 10.0; //Größe der Pixel
+
         this->resize(600,600);
         this->setWindowTitle("PixelEditor");
+
         colour1 = new QPushButton("Rot", this);
         colour2 = new QPushButton("Orange", this);
         colour3 = new QPushButton("Gelb", this);
@@ -198,12 +210,19 @@ public:
         paletteGrid->addWidget(colour6);
         paletteGrid->addWidget(colour7);
         paletteGrid->addWidget(colour8);
-        layout1 = new QHBoxLayout();
-        layout2 = new QVBoxLayout();
+
+        layout1 = new QHBoxLayout(); //"Basis"-Layout, legt Zeichenfläche und Farbpalette aus
+
         scene = new QGraphicsScene(0,0,(qreal)(px_size*px_x),(qreal)(px_size*px_y));
         sceneView = new QGraphicsView(scene);
         sceneView->setMaximumSize(px_x*px_size+px_size,px_y*px_size+px_size);
         sceneView->setBackgroundBrush(Qt::white);
+
+        farbe = new QLabel("Farbe: Schwarz", this); //Anzeige der momentan verwendeten Farbe
+        farbe->setGeometry(sceneView->sceneRect().left()+px_size, sceneView->sceneRect().bottom(),sceneView->sceneRect().left()+(sceneView->sceneRect().width())/2, sceneView->sceneRect().bottom()+20);
+        whichBrush= new QLabel("Stift: Dünn", this); //Anzeige des momentan verwendeten Stifts
+        whichBrush->setGeometry(sceneView->sceneRect().left()+(sceneView->sceneRect().width())/2, sceneView->sceneRect().bottom(),sceneView->sceneRect().left()+(sceneView->sceneRect().width()), sceneView->sceneRect().bottom()+20);
+
 
         //-----------grid-----------//
         for(auto i = 0; i < px_x; i++){
@@ -242,12 +261,13 @@ public:
         menu2->addAction(action10);
 
         gridWidget = new QWidget();
-        gridWidget->setLayout(paletteGrid);
+        gridWidget->setLayout(paletteGrid); //Widget für das Farbpalettenlayout, um es ins Basis-Layout einzufügen
+
         layout1->addWidget(sceneView);
         layout1->addWidget(gridWidget);
 
         layoutWidget = new QWidget();
-        layoutWidget->setLayout(layout1);
+        layoutWidget->setLayout(layout1); //Widet für das Basis-Layout, um es zentral setzen zu können
         setCentralWidget(layoutWidget);
 
         QObject::connect(action1, &QAction::triggered, this, &pixeleditor::newFile);
@@ -268,6 +288,7 @@ public:
         QObject::connect(colour6, &QPushButton::clicked, this, &pixeleditor::colorToPurple);
         QObject::connect(colour7, &QPushButton::clicked, this, &pixeleditor::colorToBlack);
         QObject::connect(colour8, &QPushButton::clicked, this, &pixeleditor::colorToWhite);
+
         windowWOMenuBar = this->height()-bar->height();
         windowWOScene = windowWOMenuBar - scene->height();
 
@@ -275,47 +296,69 @@ public:
     virtual ~pixeleditor(){}
 public slots:
     void setToThin(){
+        whichBrush->setText("Stift : Dünn");
         currentBrush = 1;
     }
     void setToThick(){
+        whichBrush->setText("Stift : Dick");
         currentBrush = 2;
     }
     void setToCheckered(){
+        whichBrush->setText("Stift : Schach");
         currentBrush = 3;
     }
     void setToStar(){
+        whichBrush->setText("Stift : Stern");
         currentBrush = 4;
     }
     void setToHeart(){
+        whichBrush->setText("Stift : Herz");
         currentBrush = 5;
     }
     void colorToRed(){
+        farbe->setText("Farbe : Rot");
         currentColor = QColor(200,30,30,255);
     }
     void colorToOrange(){
+        farbe->setText("Farbe : Orange");
         currentColor = QColor(220,140,0,255);
     }
     void colorToYellow(){
+        farbe->setText("Farbe : Gelb");
         currentColor = QColor(200,180,0,255);
     }
     void colorToGreen(){
+        farbe->setText("Farbe : Grün");
         currentColor = QColor(30,120,30,255);
     }
     void colorToBlue(){
+        farbe->setText("Farbe : Blau");
         currentColor = QColor(30,30,220,255);
     }
     void colorToPurple(){
+        farbe->setText("Farbe : Lila");
         currentColor = QColor(120,20,200,255);
     }
     void colorToBlack(){
+        farbe->setText("Farbe : Schwarz");
         currentColor = QColor(20,20,20,255);
     }
     void colorToWhite(){
+        farbe->setText("Farbe : Weiß");
         currentColor = QColor(255,255,255,255);
     }
     void newFile(){}
-    void load(){}
-    void save(){}
+    void load(){
+    }
+    void save(){
+        img = new QImage(sceneView->sceneRect().width(), sceneView->sceneRect().height(), QImage::Format_RGBX16FPx4);
+        pain = new QPainter(img);
+        saveMessage = new QMessageBox(QMessageBox::Information, "Vorgang abgeschlossen", "Das Bild wurde gespeichert.", QMessageBox::Ok);
+        img->fill(Qt::white);
+        scene->render(pain);
+        img->save("test.png");
+        saveMessage->open();
+    }
     void saveUnder(){}
     void exit(){
         close();
@@ -326,12 +369,17 @@ private:
 
     QLayout *layout1;
     QGridLayout *paletteGrid;
-    QLayout *layout2;
+    QLabel *farbe;
+    QLabel *cursorPos;
+    QLabel *whichBrush;
     QMenuBar *bar;
-    QMenu *menu;
-    QMenu *menu2;
+    QMenu *menu; //Datei-Menü
+    QMenu *menu2;//Stift-Menü
+    QImage *img;
+    QPainter *pain;
+    QMessageBox *saveMessage;
+    //QFileDialog *fileDia;
 
-    QColor aColor;
     QPushButton *colour1;
     QPushButton *colour2;
     QPushButton *colour3;
@@ -341,7 +389,7 @@ private:
     QPushButton *colour7;
     QPushButton *colour8;
     QColor currentColor;
-    int currentBrush;
+    int currentBrush; //Verwendet zur Fallunterscheidung zwischen ausgewähltem Brush
 
     QGraphicsScene *scene;
     QGraphicsView *sceneView;
@@ -356,8 +404,7 @@ private:
     QAction *action8;
     QAction *action9;
     QAction *action10;
-    QPointF currentPos;
-    //bool eventFilter(QObject *obj, QEvent *ev);
+    QPointF currentPos; //Momentane Position, verwendet für Zeichenfunktionen
 
     int windowWOMenuBar; //part of the menu without the menu bar
     int windowWOScene; //windowWOMenuBar without the scene area
@@ -367,8 +414,10 @@ private:
     int px_x;
     int px_y;
     int px_size;
+
 protected:
     void mousePressEvent(QMouseEvent *event){
+        cursorPos = new QLabel("allo", this);
         switch(currentBrush){
         case 1:
             paint(event);
@@ -392,8 +441,6 @@ protected:
 
     }
     void mouseMoveEvent(QMouseEvent *event){
-        std::cout << "Maus bewegt sich" << std::endl;
-
             switch(currentBrush){
             case 1:
                 paint(event);
@@ -413,12 +460,32 @@ protected:
             default:
                 paint(event);
                 break;
-        }
-
+            }
     }
     void mouseReleaseEvent(QMouseEvent *event){
+        switch(currentBrush){
+        case 1:
+            paint(event);
+            break;
+        case 2:
+            paintNine(event);
+            break;
+        case 3:
+            paintCheckered(event);
+            break;
+        case 4:
+            paintStar(event);
+            break;
+        case 5:
+            paintHeart(event);
+            break;
+        default:
+            paint(event);
+            break;
+        }
     }
 
 };
+
 
 #endif // MAINWINDOW_H
