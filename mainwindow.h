@@ -30,155 +30,54 @@ class pixeleditor : public QMainWindow{
 
 public:
 
+    //Berechnung der Position beachtet auch Abstände zu anderen Widget-Elementen (z.B. Menübar)
 
-    int getCurrentBrush(){
-        return currentBrush;
-    }
+    //------------------------------------------------------//
     /*
      * void pixeleditor::paint(QMouseEvent *e)
      * Setzt ein Kästchen/ Pixel an die Stelle des Cursors
     */
-
-    void paint(QMouseEvent *e){ //Berechnung der Position beachtet auch Abstände zu anderen Widget-Elementen (z.B. Menübar)
-
-        currentPos = QPoint((int)((qreal)(calcPixel(px_size,e->position().x()-2*(sceneView->x())))),calcPixel(px_size,e->position().y()-bar->height()-windowWOScene/2));
-        scene->addRect(currentPos.x(),currentPos.y(), 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        update();
-    }
-    //-------------------------------------------------------------------------------//
-
-    /*
-     * void pixeleditor::paintNine(QMouseEvent *e)
-     * Setzt ein 3x3 Kästchen-/ Pixelmuster an die Position des Cursors.
-    */
-
-    void paintNine(QMouseEvent *e){ //Berechnung der Position beachtet auch Abstände zu anderen Widget-Elementen (z.B. Menübar)
-
-        currentPos = QPoint((int)(qCeil((qreal)(calcPixel(px_size,e->position().x())-2*(sceneView->x())))-1),calcPixel(px_size,e->position().y()-bar->height()-windowWOScene/2));
-        scene->addRect(currentPos.x(),currentPos.y(), 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()-px_size,currentPos.y()-px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x(),currentPos.y()-px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x(),currentPos.y()+px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()+px_size,currentPos.y()+px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()-px_size,currentPos.y()+px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()+px_size,currentPos.y()-px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()+px_size,currentPos.y(), 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()-px_size,currentPos.y(), 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        update();
-    }
-//-------------------------------------------------------------------------------//
-
-    /*
-     * void pixeleditor::paintHeart(QMouseEvent *e)
-     * Setzt ein herzförmiges Kästchen-/ Pixelmuster an die Position des Cursors.
-    */
-
-    void paintHeart(QMouseEvent *e){//Berechnung der Position beachtet auch Abstände zu anderen Widget-Elementen (z.B. Menübar)
-
-        currentPos = QPoint((int)(qCeil((qreal)(calcPixel(px_size,e->position().x())-2*(sceneView->x())))-1),calcPixel(px_size,e->position().y()-bar->height()-windowWOScene/2));
-
-        scene->addRect(currentPos.x(),currentPos.y(), 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()-px_size,currentPos.y()-px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x(),currentPos.y()-px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x(),currentPos.y()+px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()+px_size,currentPos.y()+px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()-px_size,currentPos.y()+px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()+px_size,currentPos.y()-px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()+px_size,currentPos.y(), 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()-px_size,currentPos.y(), 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()-px_size,currentPos.y()-2*px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()-2*px_size,currentPos.y()-2*px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()-2*px_size,currentPos.y()-px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()-2*px_size,currentPos.y(), 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()+px_size,currentPos.y()-2*px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()+2*px_size,currentPos.y()-2*px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()+2*px_size,currentPos.y()-px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()+2*px_size,currentPos.y(), 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x(),currentPos.y()+2*px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        update();
-    }
-
-    //-------------------------------------------------------------------------------//
-
-    /*
-     * void pixeleditor::paintHeart(QMouseEvent *e)
-     * Setzt ein herzförmiges Kästchen-/ Pixelmuster an die Position des Cursors.
-    */
-
-    void paintStar(QMouseEvent *e){//Berechnung der Position beachtet auch Abstände zu anderen Widget-Elementen (z.B. Menübar)
-
-        currentPos = QPoint((int)(qCeil((qreal)(calcPixel(px_size,e->position().x())-2*(sceneView->x())))-1),calcPixel(px_size,e->position().y()-bar->height()-windowWOScene/2));
-
-        scene->addRect(currentPos.x(),currentPos.y(), 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()-px_size,currentPos.y()-px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x(),currentPos.y()-px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()+px_size,currentPos.y()+px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()-px_size,currentPos.y()+px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()+px_size,currentPos.y()-px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()+px_size,currentPos.y(), 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()-px_size,currentPos.y(), 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x(),currentPos.y()-2*px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()-2*px_size,currentPos.y()-px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        scene->addRect(currentPos.x()+2*px_size,currentPos.y()-px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        update();
-    }
-
-    //-------------------------------------------------------------------------------//
-
+    void paint(QMouseEvent *e);
+    //------------------------------------------------------//
     /*
      * void pixeleditor::paintCheckered(QMouseEvent *e)
      * Setzt ein 3x3 Kästchen-/ Pixel-Schachmuster an die Position des Cursors.
      * Es werden immer die gleichen Pixel ausgefüllt (alle mit x-Koord + y-Koord % 2 = 0, also "alle zwei Pixel")
     */
+    void paintCheckered(QMouseEvent *e);
+    //------------------------------------------------------//
+    /*
+     * void pixeleditor::paintNine(QMouseEvent *e)
+     * Setzt ein 3x3 Kästchen-/ Pixel-Schachmuster an die Position des Cursors.
+    */
+    void paintNine(QMouseEvent *e);
 
-    void paintCheckered(QMouseEvent *e){//Berechnung der Position beachtet auch Abstände zu anderen Widget-Elementen (z.B. Menübar)
+    //------------------------------------------------------//
+    /*
+     * void pixeleditor::paintHeart(QMouseEvent *e)
+     * Setzt ein herzförmiges Kästchen-/ Pixelmuster an die Position des Cursors.
+    */
+    void paintHeart(QMouseEvent *e);
 
-        currentPos = QPoint((int)(qCeil((qreal)(calcPixel(px_size,e->position().x())-2*(sceneView->x())))-1),calcPixel(px_size,e->position().y()-bar->height()-windowWOScene/2));
+    //------------------------------------------------------//
+    /*
+     * void pixeleditor::paintHeart(QMouseEvent *e)
+     * Setzt ein sternförmiges Kästchen-/ Pixelmuster an die Position des Cursors.
+    */
+    void paintStar(QMouseEvent *e);
 
-        if(qRound(( ((currentPos.x())/px_size) + ((currentPos.y())/px_size) )) % 2 == 0){
-            scene->addRect(currentPos.x(),currentPos.y(), 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        }
-        if(qRound(( ((currentPos.x()-px_size)/px_size) + ((currentPos.y()-px_size)/px_size) )) % 2 == 0){
-            scene->addRect(currentPos.x()-px_size,currentPos.y()-px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        }
-        if(qRound(( ((currentPos.x())/px_size) + ((currentPos.y()-px_size)/px_size) )) % 2 == 0){
-            scene->addRect(currentPos.x(),currentPos.y()-px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        }
-        if(qRound(( ((currentPos.x())/px_size) + ((currentPos.y()+px_size)/px_size) )) % 2 == 0){
-            scene->addRect(currentPos.x(),currentPos.y()+px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        }
-        if(qRound(( ((currentPos.x()+px_size)/px_size) + ((currentPos.y()+px_size)/px_size) )) % 2 == 0){
-            scene->addRect(currentPos.x()+px_size,currentPos.y()+px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        }
-        if(qRound(( ((currentPos.x()-px_size)/px_size) + ((currentPos.y()+px_size)/px_size) )) % 2 == 0){
-            scene->addRect(currentPos.x()-px_size,currentPos.y()+px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        }
-        if(qRound(( ((currentPos.x()+px_size)/px_size) + ((currentPos.y()-px_size)/px_size) )) % 2 == 0){
-            scene->addRect(currentPos.x()+px_size,currentPos.y()-px_size, 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        }
-        if(qRound(( ((currentPos.x()+px_size)/px_size) + ((currentPos.y())/px_size) )) % 2 == 0){
-            scene->addRect(currentPos.x()+px_size,currentPos.y(), 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        }
-        if(qRound(( ((currentPos.x()-px_size)/px_size) + ((currentPos.y())/px_size) )) % 2 == 0){
-            scene->addRect(currentPos.x()-px_size,currentPos.y(), 1*px_size,1*px_size,QPen(Qt::transparent,3,Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin), QBrush(currentColor, Qt::SolidPattern));
-        }
-        update();
-    }
-
-    //-------------------------------------------------------------------------------//
-
+    //------------------------------------------------------//
     /*
      * int calcPixel(int pPx_size, int coord)
      * Auf Rasterkoordinate des zu zeichnenden Pixel runden,
      *  z.B. wenn Cursor auf (100,100) liegt und px_size = 32
      *  dann soll er den Pixel an (96,96) zeichnen
     */
+    int calcPixel(int pPx_size, int coord);
 
-    int calcPixel(int pPx_size, int coord){
-        return qFloor((coord/pPx_size))*pPx_size;
-    }
+    //------------------------------------------------------//
 
-    //-------------------------------------------------------------------------------//
+
     pixeleditor(QWidget *parent = NULL) : QMainWindow(parent){
 
         currentBrush = 1;
